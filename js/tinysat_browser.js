@@ -10,6 +10,15 @@ inputElement.setOptions({
   autoScrollEditorIntoView: true
 });
 
+inputElement.getSession().on('change', function() {
+  localStorage.setItem("tinysatviz-example-input", inputElement.getValue());
+});
+
+var stored_input = localStorage.getItem("tinysatviz-example-input");
+if (stored_input) {
+  inputElement.setValue(stored_input);
+}
+
 var output = "Ready..";
 var outputElement = document.getElementById('output');
 updateOutput();
