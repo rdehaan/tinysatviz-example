@@ -68,7 +68,6 @@ function interface_backjump(level) {
   cur_assignment = cur_assignment.filter(obj =>
     obj.level <= level
   );
-  addToLog(cur_assignment);
   showState();
 }
 
