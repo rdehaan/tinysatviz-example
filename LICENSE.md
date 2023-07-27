@@ -1,5 +1,6 @@
 MIT License
 
+Copyright (c) 2016 Paul Saikko
 Copyright (c) 2023 Ronald de Haan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
