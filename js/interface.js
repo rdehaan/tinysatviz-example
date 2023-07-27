@@ -93,13 +93,3 @@ function do_abort() {
   document.getElementById("btn_resume").disabled = true;
   document.getElementById("btn_abort").disabled = true;
 }
-
-// ===
-// - Split pure interface from aux functions
-// - Add/implement abort button
-// - Implement speed selector
-
-// - Implement interface and pause at the right time
-// - Pass assignment, etc, to interface functions
-// - Add html element that displays assignment, etc.
-// ===
