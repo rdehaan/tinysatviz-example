@@ -78,7 +78,7 @@ function addToOutput(text) {
 
 function updateOutput() {
   if (outputElement) {
-    var output_to_show = "..";
+    var output_to_show = " ";
     if (output != "") {
       output_to_show = output;
     }
@@ -98,7 +98,7 @@ function addToLog(text) {
 }
 
 function updateLog() {
-  var log_to_show = "..";
+  var log_to_show = " ";
   if (log != "") {
     log_to_show = log;
   }
