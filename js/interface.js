@@ -26,16 +26,31 @@ function interface_wait_time_conflict() {
   return speed_factor*500;
 }
 
+var cur_level = 0;
+var assignment = [];
+var last_learned = [];
+
 function interface_start() {
   should_abort = false;
   document.getElementById("btn_solve").disabled = true;
   document.getElementById("btn_pause").disabled = false;
   document.getElementById("btn_resume").disabled = true;
   document.getElementById("btn_abort").disabled = false;
+
+  cur_level = 0;
+  cur_assignment = [];
+  last_learned = [];
+  showState();
 }
 
 function interface_propagate(lit) {
   addToLog("PROPAGATING: " + lit);
+  cur_assignment.push({
+    level: cur_level,
+    lit: lit,
+    type: "prop",
+  });
+  showState();
 }
 
 function interface_conflict(clause) {
@@ -44,14 +59,28 @@ function interface_conflict(clause) {
 
 function interface_learned_clause(clause) {
   addToLog("LEARNED CLAUSE: [" + clause + "]");
+  last_learned = clause;
 }
 
 function interface_backjump(level) {
   addToLog("BACKJUMPING TO LEVEL: " + level);
+  cur_level = level;
+  cur_assignment = cur_assignment.filter(obj =>
+    obj.level <= level
+  );
+  addToLog(cur_assignment);
+  showState();
 }
 
 function interface_decide(lit) {
   addToLog("DECIDING: " + lit);
+  cur_level += 1;
+  cur_assignment.push({
+    level: cur_level,
+    lit: lit,
+    type: "decide",
+  });
+  showState();
 }
 
 function interface_result(result) {
@@ -92,4 +121,20 @@ function do_abort() {
   document.getElementById("btn_pause").disabled = true;
   document.getElementById("btn_resume").disabled = true;
   document.getElementById("btn_abort").disabled = true;
+}
+
+function showState() {
+  clearState();
+
+  addToState("Current assignment: " + cur_assignment.map(obj =>
+    obj.lit + "@" + obj.level
+  ));
+  addToState("Decisions: " + cur_assignment.filter(obj =>
+    obj.type == "decide"
+  ).map(obj =>
+    obj.lit + "@" + obj.level
+  ));
+  if (last_learned.length > 0) {
+    addToState("Last learned clause: [" + last_learned + "]");
+  }
 }

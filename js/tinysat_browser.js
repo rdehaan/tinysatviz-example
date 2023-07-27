@@ -17,6 +17,8 @@ inputElement.getSession().on('change', function() {
 var stored_input = localStorage.getItem("tinysatviz-example-input");
 if (stored_input) {
   inputElement.setValue(stored_input);
+  inputElement.execCommand("gotolineend");
+
 }
 
 var output = "Ready..";
@@ -26,6 +28,10 @@ updateOutput();
 var log = "Ready..";
 var logElement = document.getElementById('log');
 updateLog();
+
+var state = "Ready..";
+var stateElement = document.getElementById('state');
+updateState();
 
 var solve = async function () {
 
@@ -114,5 +120,26 @@ function updateLog() {
   if (logElement) {
     logElement.textContent = log_to_show;
     // logElement.scrollTop = logElement.scrollHeight; // focus on bottom
+  }
+}
+
+function clearState() {
+  state = "";
+  updateState();
+}
+
+function addToState(text) {
+  state = state + text + "\n";
+  updateState();
+}
+
+function updateState() {
+  var state_to_show = " ";
+  if (state != "") {
+    state_to_show = state;
+  }
+  if (stateElement) {
+    stateElement.textContent = state_to_show;
+    // stateElement.scrollTop = stateElement.scrollHeight; // focus on bottom
   }
 }

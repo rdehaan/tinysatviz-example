@@ -130,6 +130,13 @@ pre {
    background-color: #fee; }
 
 /**
+ * State formatting
+ */
+ .state {
+   background-color: #efe; }
+
+
+/**
  * Wrapper
  */
 .wrapper {
