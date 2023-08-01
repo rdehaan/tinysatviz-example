@@ -41,6 +41,16 @@ function interface_start() {
   cur_assignment = [];
   last_learned = [];
   showState();
+
+  var nodes = new vis.DataSet([]);
+  var edges = new vis.DataSet([]);
+  var container = document.getElementById("conflict-graph");
+  var data = {
+    nodes: nodes,
+    edges: edges,
+  };
+  var options = {};
+  var network = new vis.Network(container, data, options);
 }
 
 function interface_propagate(lit) {
@@ -60,6 +70,69 @@ function interface_conflict(clause) {
 function interface_learned_clause(clause) {
   addToLog("LEARNED CLAUSE: [" + clause + "]");
   last_learned = clause;
+  showState();
+}
+
+function interface_analyze(conflict_graph) {
+  console.log(conflict_graph);
+
+  // See examples here: https://visjs.github.io/vis-network/examples/
+  var node_data = [];
+  var edge_data = [];
+  for (node in conflict_graph) {
+    node_obj = {
+      id: node,
+    };
+    // Set node label
+    if (node == 'bot') {
+      node_obj['label'] = '⊥';
+      node_obj['fixed'] = true;
+    } else {
+      node_obj['label'] = node + "@" + conflict_graph[node]['level'];
+    }
+    // Set node color
+    if (conflict_graph[node]['reason'].length == 0) {
+      node_obj['color'] = '#efe';
+    } else if (conflict_graph[node]['side'] == 'left') {
+      node_obj['color'] = '#eef';
+    } else {
+      node_obj['color'] = '#fee';
+    }
+    node_data.push(node_obj);
+    // Add edges
+    for (prev_node_idx in conflict_graph[node]['reason']) {
+      edge_obj = {
+        from: -1*conflict_graph[node]['reason'][prev_node_idx],
+        to: node,
+        arrows: {
+          to: {
+            enabled: true,
+            type: 'arrow',
+          },
+        },
+      };
+      console.log("Add edge from " + conflict_graph[node]['reason'][prev_node_idx] + " to " + node);
+      edge_data.push(edge_obj);
+    }
+  }
+  var nodes = new vis.DataSet(node_data);
+  var edges = new vis.DataSet(edge_data);
+
+  var container = document.getElementById("conflict-graph");
+  var data = {
+    nodes: nodes,
+    edges: edges,
+  };
+  var options = {
+    physics: {
+      enabled: true,
+      wind: {
+        x: -1,
+        y: 0,
+      },
+    },
+  };
+  var network = new vis.Network(container, data, options);
 }
 
 function interface_backjump(level) {

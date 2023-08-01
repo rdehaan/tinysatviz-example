@@ -384,7 +384,28 @@ var initSolver = function () {
 
     var lit = null;
     var v = null;
-    var reason = conflict;
+    var reason = null;
+
+    var conflict_graph = {};
+    var j_stack = assignStack.length - 1;
+    while (j_stack >= 0) {
+      lit = assignStack[j_stack];
+      --j_stack;
+      var v = litVar(lit);
+      var reason = assignReason[v];
+      conflict_graph[lit] = {
+        'side': 'left',
+        'reason': reason,
+        'level': assignLevel[v],
+      };
+    }
+    conflict_graph['bot'] = {
+      'side': 'right',
+      'reason': conflict,
+    }
+    var lit = null;
+    var v = null;
+    var reason = conflict
 
     do {
       for (var i = 0; i < reason.length; ++i) {
@@ -415,6 +436,10 @@ var initSolver = function () {
       reason = assignReason[v];
       seen[v] = false;
 
+      if (assertingLits > 1) {
+        conflict_graph[lit]['side'] = 'right';
+      }
+
       --assertingLits;
 
       // logger(lit+" from "+conflictToString(reason));
@@ -422,6 +447,9 @@ var initSolver = function () {
 
     clause.push(-lit);
     swap(clause, 0, clause.length-1);
+
+    interface_analyze(conflict_graph);
+    interface_learned_clause(clause);
 
     // logger("learn clause "+conflictToString(clause)+" at l"+level);
     return clause;
@@ -536,7 +564,6 @@ var initSolver = function () {
         }
         addClause(learnt);
 
-        interface_learned_clause(learnt);
         if (!should_abort) {
           await sleep(interface_wait_time_learn());
           await wait_until_allowed_to_continue();
