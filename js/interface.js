@@ -103,7 +103,10 @@ function interface_analyze(conflict_graph) {
       node_obj['fixed'] = true;
     }
     // Set node color
-    if (conflict_graph[node]['reason'].length == 0 && conflict_graph[node]['level'] > 0) {
+    if (conflict_graph[node]['level'] == 0) {
+      node_obj['color'] = '#fff';
+      node_obj['shape'] = 'box';
+    } else if (conflict_graph[node]['reason'].length == 0) {
       node_obj['color'] = '#efe';
     } else if (conflict_graph[node]['side'] == 'left') {
       node_obj['color'] = '#eef';
