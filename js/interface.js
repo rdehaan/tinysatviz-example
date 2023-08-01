@@ -91,7 +91,7 @@ function interface_analyze(conflict_graph) {
       node_obj['label'] = node + "@" + conflict_graph[node]['level'];
     }
     // Set node color
-    if (conflict_graph[node]['reason'].length == 0) {
+    if (conflict_graph[node]['reason'].length == 0 && conflict_graph[node]['level'] > 0) {
       node_obj['color'] = '#efe';
     } else if (conflict_graph[node]['side'] == 'left') {
       node_obj['color'] = '#eef';
