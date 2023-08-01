@@ -521,6 +521,11 @@ var initSolver = function () {
 
     for (var i = 0; i < clauses.length; ++i) {
       if (clauses[i].length == 1) {
+        interface_propagate(clauses[i][0]);
+        if (!should_abort) {
+          await sleep(interface_wait_time_propagate());
+          await wait_until_allowed_to_continue();
+        }
         pushAssignment(clauses[i][0], []);
       }
     }
