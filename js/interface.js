@@ -79,6 +79,14 @@ function interface_analyze(conflict_graph) {
   // See examples here: https://visjs.github.io/vis-network/examples/
   var node_data = [];
   var edge_data = [];
+  // Compute which nodes have outgoing edges
+  has_outgoing_edge = {};
+  for (node in conflict_graph) {
+    for (prev_node_idx in conflict_graph[node]['reason']) {
+      from_node = -1*conflict_graph[node]['reason'][prev_node_idx];
+      has_outgoing_edge[from_node] = true;
+    }
+  }
   for (node in conflict_graph) {
     node_obj = {
       id: node,
@@ -89,6 +97,10 @@ function interface_analyze(conflict_graph) {
       node_obj['fixed'] = true;
     } else {
       node_obj['label'] = node + "@" + conflict_graph[node]['level'];
+    }
+    // Set fixation for wind
+    if (!has_outgoing_edge[node]) {
+      node_obj['fixed'] = true;
     }
     // Set node color
     if (conflict_graph[node]['reason'].length == 0 && conflict_graph[node]['level'] > 0) {
@@ -101,18 +113,20 @@ function interface_analyze(conflict_graph) {
     node_data.push(node_obj);
     // Add edges
     for (prev_node_idx in conflict_graph[node]['reason']) {
-      edge_obj = {
-        from: -1*conflict_graph[node]['reason'][prev_node_idx],
-        to: node,
-        arrows: {
-          to: {
-            enabled: true,
-            type: 'arrow',
+      from_node = -1*conflict_graph[node]['reason'][prev_node_idx];
+      if (from_node != node) {
+        edge_obj = {
+          from: from_node,
+          to: node,
+          arrows: {
+            to: {
+              enabled: true,
+              type: 'arrow',
+            },
           },
-        },
-      };
-      console.log("Add edge from " + conflict_graph[node]['reason'][prev_node_idx] + " to " + node);
-      edge_data.push(edge_obj);
+        };
+        edge_data.push(edge_obj);
+      }
     }
   }
   var nodes = new vis.DataSet(node_data);
