@@ -6,6 +6,11 @@ function interface_wait_time_propagate() {
   return speed_factor*500;
 }
 
+function interface_wait_time_propagate_round() {
+  speed_factor = document.getElementById("speed").value;
+  return speed_factor*0;
+}
+
 function interface_wait_time_decide() {
   speed_factor = document.getElementById("speed").value;
   return speed_factor*1000;
