@@ -66,6 +66,9 @@ function interface_unassign(lit) {
   console.log("UNASSIGNING: " + lit);
 }
 
+function interface_done_propagating() {  
+}
+
 function interface_propagate(lit) {
   addToLog("PROPAGATING: " + lit);
   cur_assignment.push({
