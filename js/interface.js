@@ -53,6 +53,14 @@ function interface_start() {
   var network = new vis.Network(container, data, options);
 }
 
+function interface_assign(lit) {
+  console.log("ASSIGNING: " + lit);
+}
+
+function interface_unassign(lit) {
+  console.log("UNASSIGNING: " + lit);
+}
+
 function interface_propagate(lit) {
   addToLog("PROPAGATING: " + lit);
   cur_assignment.push({
@@ -61,6 +69,7 @@ function interface_propagate(lit) {
     type: "prop",
   });
   showState();
+  interface_assign(lit);
 }
 
 function interface_conflict(clause) {
@@ -155,6 +164,11 @@ function interface_analyze(conflict_graph) {
 function interface_backjump(level) {
   addToLog("BACKJUMPING TO LEVEL: " + level);
   cur_level = level;
+  for (let i = cur_assignment.length-1; i >= 0; i--) {
+    if (cur_assignment[i].level > level) {
+      interface_unassign(cur_assignment[i].lit);
+    }
+  }
   cur_assignment = cur_assignment.filter(obj =>
     obj.level <= level
   );
@@ -170,6 +184,7 @@ function interface_decide(lit) {
     type: "decide",
   });
   showState();
+  interface_assign(lit);
 }
 
 function interface_result(result) {
