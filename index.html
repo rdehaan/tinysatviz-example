@@ -28,7 +28,24 @@ See LICENSE.md.
         </header>
 
         <div class="post-content">
-          <div class="center">
+          <div>
+
+            <p>
+              This demonstration visualizes how the search (and clause learning) process of a basic CDCL SAT solving algorithm works.
+            </p>
+
+            <p>
+              Enter a CNF formula in DIMACS format.<br />
+              Select the demonstration speed, and click "Run!" to start.
+            </p>
+
+            <p>
+              When the demonstration runs, the current partial truth assignment is depicted, as well as the stack of made branching decisions.
+              Whenever the search runs into a conflict, the conflict graph is depicted.
+              Also, various solver events are listed in the log.
+            </p>
+
+            <p>&nbsp;</p>
 
             <div>
               <b>CNF:</b>
@@ -45,6 +62,9 @@ p cnf 3 8
 -1 2 -3 0
 -1 -2 3 0
 -1 -2 -3 0</pre>
+
+          </div>
+          <div class="center">
 
             <p>
               <b>Control:</b>
@@ -70,6 +90,9 @@ p cnf 3 8
             <input type="button" id="btn_pause" value="Pause" onclick="do_pause()" disabled/>&nbsp;
             <input type="button" id="btn_resume" value="Resume" onclick="do_resume()" disabled/>&nbsp;
             <input type="button" id="btn_abort" value="Abort" onclick="do_abort()" disabled/>
+
+          </div>
+          <div>
 
             <div>&nbsp;</div>
 
